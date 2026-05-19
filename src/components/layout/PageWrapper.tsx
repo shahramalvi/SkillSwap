@@ -7,13 +7,11 @@ import { BackButton } from "./BackButton";
 interface PageWrapperProps {
   children: ReactNode;
   className?: string;
-  /** Show back control (default true except on landing). */
   showBack?: boolean;
-  /** Override back navigation target. */
   backTo?: string;
 }
 
-const NO_BACK_PATHS = ["/"];
+const NO_BACK_PATHS = ["/", "/dashboard"];
 
 export function PageWrapper({ children, className, showBack = true, backTo }: PageWrapperProps) {
   const { pathname } = useLocation();
@@ -28,7 +26,7 @@ export function PageWrapper({ children, className, showBack = true, backTo }: Pa
       className={cn("relative", className)}
     >
       {displayBack && (
-        <div className="fixed top-[4.5rem] left-4 sm:left-5 lg:left-6 z-30">
+        <div className="fixed top-[4.5rem] right-4 sm:right-5 lg:right-6 z-30">
           <BackButton to={backTo} />
         </div>
       )}

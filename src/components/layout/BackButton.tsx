@@ -1,11 +1,9 @@
-import { ArrowLeft } from "lucide-react";
 import { useLocation, useNavigate } from "react-router-dom";
 import { cn } from "../../lib/utils";
 
 const FALLBACK: Record<string, string> = {
   "/login": "/",
   "/register": "/",
-  "/dashboard": "/",
   "/search": "/dashboard",
   "/requests": "/dashboard",
   "/post-skill": "/dashboard",
@@ -46,13 +44,10 @@ export function BackButton({ to, label = "Back", className }: BackButtonProps) {
       type="button"
       onClick={handleClick}
       className={cn(
-        "inline-flex items-center gap-1.5 px-3 py-2 rounded-xl text-sm font-semibold",
-        "bg-white/95 border border-border text-navy shadow-card",
-        "hover:bg-white hover:border-teal/40 transition-all",
+        "text-sm font-semibold text-teal hover:text-navy hover:underline transition-colors cursor-pointer",
         className,
       )}
     >
-      <ArrowLeft size={16} aria-hidden />
       {label}
     </button>
   );
