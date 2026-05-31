@@ -21,6 +21,13 @@ import { Chat } from "./pages/Chat";
 import { Proposals } from "./pages/Proposals";
 import { Requests } from "./pages/Requests";
 
+function AssistantBotGate() {
+  const location = useLocation();
+  const hideAssistant = ["/", "/login", "/register"].includes(location.pathname);
+  if (hideAssistant) return null;
+  return <AssistantBot />;
+}
+
 function AppChrome() {
   const location = useLocation();
   const isPublic = ["/", "/login", "/register"].includes(location.pathname);
@@ -62,7 +69,7 @@ export default function App() {
       <AuthInit>
         <AppChrome />
         <AnimatedRoutes />
-        <AssistantBot />
+        <AssistantBotGate />
         <Toaster
           position="top-center"
           toastOptions={{

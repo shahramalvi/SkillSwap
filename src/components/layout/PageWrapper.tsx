@@ -9,13 +9,35 @@ interface PageWrapperProps {
   className?: string;
   showBack?: boolean;
   backTo?: string;
+  animateEntry?: boolean;
 }
 
 const NO_BACK_PATHS = ["/", "/dashboard"];
 
-export function PageWrapper({ children, className, showBack = true, backTo }: PageWrapperProps) {
+export function PageWrapper({
+  children,
+  className,
+  showBack = true,
+  backTo,
+  animateEntry = true,
+}: PageWrapperProps) {
   const { pathname } = useLocation();
   const displayBack = showBack && !NO_BACK_PATHS.includes(pathname);
+
+  const content = (
+    <>
+      {displayBack && (
+        <div className="fixed top-6 right-6 sm:right-8 z-30 ml-[72px]">
+          <BackButton to={backTo} />
+        </div>
+      )}
+      {children}
+    </>
+  );
+
+  if (!animateEntry) {
+    return <div className={cn("relative", className)}>{content}</div>;
+  }
 
   return (
     <motion.div
@@ -25,12 +47,7 @@ export function PageWrapper({ children, className, showBack = true, backTo }: Pa
       transition={{ duration: 0.3 }}
       className={cn("relative", className)}
     >
-      {displayBack && (
-        <div className="fixed top-6 right-6 sm:right-8 z-30 ml-[72px]">
-          <BackButton to={backTo} />
-        </div>
-      )}
-      {children}
+      {content}
     </motion.div>
   );
 }

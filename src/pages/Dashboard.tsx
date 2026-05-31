@@ -207,8 +207,8 @@ export function Dashboard() {
     hour < 12 ? "Good morning" : hour < 17 ? "Good afternoon" : "Good evening";
 
   return (
-    <AppPage>
-      <div className="space-y-6">
+    <AppPage className="min-w-0 overflow-x-clip">
+      <div className="space-y-6 min-w-0">
         {info?.status === "trial" && (
           <motion.div
             initial={{ opacity: 0, y: 8 }}
@@ -357,13 +357,13 @@ export function Dashboard() {
           </motion.div>
         </div>
 
-        <div className="bg-white rounded-3xl border border-white shadow-card p-4 sm:p-6 min-w-0">
-          <div className="flex items-center justify-between mb-5">
-            <div>
+        <div className="bg-white rounded-3xl border border-white shadow-card p-4 sm:p-6 min-w-0 overflow-hidden">
+          <div className="flex flex-wrap items-start justify-between gap-3 mb-5 min-w-0">
+            <div className="min-w-0 flex-1">
               <h2 className="text-base font-bold text-navy">Recent activity</h2>
               <p className="text-xs text-muted mt-0.5">Latest exchange requests</p>
             </div>
-            <Link to="/requests" className="inline-flex items-center gap-0.5 text-xs font-semibold text-teal hover:underline">
+            <Link to="/requests" className="inline-flex items-center gap-0.5 text-xs font-semibold text-teal hover:underline shrink-0 whitespace-nowrap">
               View all <ArrowRight size={13} />
             </Link>
           </div>
@@ -389,9 +389,11 @@ export function Dashboard() {
               </Link>
             </div>
           ) : (
-            <div className="space-y-3">
+            <div className="space-y-3 min-w-0">
               {recentRequests.map((r) => (
-                <ExchangeRequestCard key={r.id} request={r} />
+                <div key={r.id} className="min-w-0">
+                  <ExchangeRequestCard request={r} />
+                </div>
               ))}
             </div>
           )}

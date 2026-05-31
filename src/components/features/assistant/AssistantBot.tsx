@@ -44,7 +44,7 @@ export function AssistantBot() {
             animate={{ opacity: 1, y: 0, scale: 1 }}
             exit={{ opacity: 0, y: 16, scale: 0.96 }}
             transition={{ duration: 0.2 }}
-            className="fixed z-50 flex flex-col overflow-hidden bg-white rounded-3xl border border-white shadow-[0_20px_60px_rgba(13,27,62,0.18)] inset-x-3 bottom-[calc(5.5rem+env(safe-area-inset-bottom,0px))] h-[min(70dvh,560px)] sm:inset-x-auto sm:right-4 sm:bottom-24 sm:w-[min(calc(100vw-2rem),400px)] lg:right-6"
+            className="fixed z-50 flex flex-col overflow-hidden bg-white rounded-3xl border border-white shadow-[0_20px_60px_rgba(13,27,62,0.18)] inset-x-3 bottom-24 h-[min(70dvh,560px)] sm:inset-x-auto sm:right-4 sm:bottom-24 sm:w-[min(calc(100vw-2rem),400px)] lg:right-6"
           >
             <header className="bg-navy px-4 py-3.5 flex items-center justify-between shrink-0">
               <div className="flex items-center gap-2.5">
@@ -160,7 +160,7 @@ export function AssistantBot() {
         whileTap={{ scale: 0.94 }}
         className={cn(
           "fixed z-50 w-14 h-14 rounded-2xl shadow-[0_8px_30px_rgba(13,27,62,0.2)] flex items-center justify-center transition-colors",
-          "right-3 bottom-[calc(5.5rem+env(safe-area-inset-bottom,0px))] sm:right-4 md:bottom-6 lg:right-6",
+          "right-3 bottom-6 sm:right-4 lg:right-6",
           open ? "bg-navy-light text-on-hero" : "bg-navy text-on-hero hover:bg-navy-light",
         )}
         aria-label={open ? "Close Swap Assistant" : "Open Swap Assistant"}

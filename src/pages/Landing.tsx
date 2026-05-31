@@ -18,21 +18,25 @@ const features = [
   { icon: Star, label: "Build reputation", desc: "Complete trades, grow your profile, earn trust." },
 ];
 
-const marqueeItems = [...SKILL_CATEGORIES, ...SKILL_CATEGORIES, ...SKILL_CATEGORIES];
+const marqueeItems = [...SKILL_CATEGORIES, ...SKILL_CATEGORIES];
+
+function scrollToHowItWorks() {
+  document.getElementById("how-it-works")?.scrollIntoView({ behavior: "smooth", block: "start" });
+}
 
 export function Landing() {
   return (
-    <PageWrapper className="bg-canvas">
-      <section className="relative min-h-screen flex flex-col bg-hero-gradient overflow-hidden dot-pattern">
+    <PageWrapper className="bg-canvas" animateEntry={false} showBack={false}>
+      <section className="relative min-h-[100dvh] flex flex-col bg-hero-gradient overflow-x-clip dot-pattern">
         <div className="absolute top-32 left-[10%] w-64 h-64 rounded-full bg-teal/20 blur-3xl pointer-events-none animate-pulse-slow" />
         <div className="absolute bottom-20 right-[8%] w-80 h-80 rounded-full bg-purple/15 blur-3xl pointer-events-none animate-pulse-slow" style={{ animationDelay: "1.5s" }} />
 
-        <div className="flex-1 flex flex-col items-center justify-center px-4 sm:px-5 lg:px-6 pt-28 pb-16 text-center relative z-10 w-full max-w-7xl mx-auto">
+        <div className="flex-1 flex flex-col items-center justify-center px-4 sm:px-5 lg:px-6 pt-24 pb-10 text-center relative z-10 w-full max-w-7xl mx-auto min-h-0">
           <motion.div
             initial={{ opacity: 0, y: 30 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.6, ease: "easeOut" }}
-            className="max-w-4xl"
+            className="max-w-4xl w-full mx-auto"
           >
             <motion.div
               initial={{ scale: 0.8, opacity: 0 }}
@@ -63,25 +67,30 @@ export function Landing() {
               Swap your expertise for someone else&apos;s. A barter-only circular economy — just for Karachi.
             </p>
 
-            <div className="flex flex-col sm:flex-row gap-4 justify-center mt-10">
-              <Link to="/register">
+            <div className="flex flex-col sm:flex-row flex-wrap gap-4 justify-center items-stretch sm:items-center mt-10 w-full max-w-lg sm:max-w-none mx-auto">
+              <Link to="/register" className="w-full sm:w-auto sm:min-w-[200px] flex justify-center">
                 <motion.button
-                  whileHover={{ scale: 1.04 }} whileTap={{ scale: 0.97 }}
+                  whileHover={{ scale: 1.04 }}
+                  whileTap={{ scale: 0.97 }}
                   type="button"
-                  className="flex items-center gap-2 justify-center bg-white text-navy font-bold px-8 py-4 rounded-2xl text-base shadow-none hover:bg-teal-light transition-colors"
+                  className="w-full sm:w-auto inline-flex items-center justify-center gap-2 bg-white text-navy font-bold px-8 py-4 rounded-2xl text-base shadow-none hover:bg-teal-light transition-colors"
                 >
                   Start free trial <ArrowRight size={20} />
                 </motion.button>
               </Link>
-              <a href="#how-it-works">
-                <motion.button
-                  whileHover={{ scale: 1.04 }} whileTap={{ scale: 0.97 }}
-                  type="button"
-                  className="flex items-center gap-2 justify-center glass text-on-hero font-semibold px-8 py-4 rounded-2xl text-base hover:bg-teal/20 transition-colors"
+              <button
+                type="button"
+                onClick={scrollToHowItWorks}
+                className="w-full sm:w-auto sm:min-w-[200px] flex justify-center"
+              >
+                <motion.span
+                  whileHover={{ scale: 1.04 }}
+                  whileTap={{ scale: 0.97 }}
+                  className="w-full sm:w-auto inline-flex items-center justify-center gap-2 glass text-on-hero font-semibold px-8 py-4 rounded-2xl text-base hover:bg-teal/20 transition-colors cursor-pointer"
                 >
                   See how it works
-                </motion.button>
-              </a>
+                </motion.span>
+              </button>
             </div>
 
             <motion.div className="mt-12 flex flex-wrap items-center justify-center gap-6 text-on-hero-muted text-sm">
@@ -94,8 +103,8 @@ export function Landing() {
           </motion.div>
         </div>
 
-        <div className="overflow-hidden border-y border-teal/20 py-4 bg-navy/30 backdrop-blur-sm relative z-10">
-          <div className="flex animate-marquee whitespace-nowrap">
+        <div className="shrink-0 overflow-hidden border-y border-teal/20 py-4 bg-navy/30 backdrop-blur-sm relative z-10 w-full">
+          <div className="flex w-max animate-marquee whitespace-nowrap will-change-transform">
             {marqueeItems.map((cat, i) => (
               <span key={`${cat}-${i}`} className="mx-3 px-4 py-1.5 rounded-full bg-teal/15 text-on-hero-muted text-sm font-medium shrink-0 hover:bg-teal/30 hover:text-on-hero transition-colors cursor-default">
                 {cat}
@@ -105,7 +114,7 @@ export function Landing() {
         </div>
       </section>
 
-      <section id="how-it-works" className="py-24">
+      <section id="how-it-works" className="py-24 scroll-mt-20">
         <Container>
         <motion.div
           initial={{ opacity: 0, y: 20 }}

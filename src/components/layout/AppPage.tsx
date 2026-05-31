@@ -17,7 +17,7 @@ export function AppPage({
 }: AppPageProps) {
   return (
     <PageWrapper className={cn("min-h-full", className)} showBack={showBack} backTo={backTo}>
-      <div className="space-y-6 w-full">{children}</div>
+      <div className="space-y-6 w-full min-w-0">{children}</div>
     </PageWrapper>
   );
 }

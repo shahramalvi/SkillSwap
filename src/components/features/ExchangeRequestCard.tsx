@@ -64,15 +64,15 @@ export function ExchangeRequestCard({ request }: ExchangeRequestCardProps) {
   };
 
   return (
-    <div className="bg-white border border-white rounded-3xl p-5 shadow-card space-y-4">
-      <div className="flex flex-wrap items-start justify-between gap-2">
-        <div>
-          <p className="font-bold text-navy">{request.skillTitle}</p>
-          <p className="text-xs text-muted mt-0.5">
+    <div className="bg-white border border-white rounded-3xl p-4 sm:p-5 shadow-card space-y-4 w-full min-w-0 overflow-hidden">
+      <div className="flex flex-wrap items-start justify-between gap-2 gap-y-3">
+        <div className="min-w-0 flex-1 basis-[min(100%,12rem)]">
+          <p className="font-bold text-navy break-words line-clamp-2">{request.skillTitle}</p>
+          <p className="text-xs text-muted mt-0.5 break-words">
             with {otherName} · {formatRelativeTime(request.updatedAt.toDate())}
           </p>
         </div>
-        <div className="flex flex-wrap gap-1.5">
+        <div className="flex flex-wrap gap-1.5 shrink-0 max-w-full">
           <Badge variant="navy">
             <span className="inline-flex items-center gap-1">
               <Handshake size={11} /> Barter
@@ -93,11 +93,11 @@ export function ExchangeRequestCard({ request }: ExchangeRequestCardProps) {
         </div>
       </div>
 
-      <div className="text-sm text-slate-600 bg-slate-50 rounded-xl p-3 border border-slate-100">
+      <div className="text-sm text-slate-600 bg-slate-50 rounded-xl p-3 border border-slate-100 min-w-0 overflow-hidden">
         <p className="text-xs font-semibold text-muted uppercase mb-1">Scope</p>
-        <p>{request.scopeDescription}</p>
+        <p className="break-words line-clamp-4">{request.scopeDescription}</p>
         {request.barterOffer && (
-          <p className="mt-2 text-navy">
+          <p className="mt-2 text-navy break-words line-clamp-3">
             <span className="font-semibold">Barter offer:</span>{" "}
             {request.barterOffer.skillTitle
               ? `${request.barterOffer.skillTitle} — `
@@ -150,7 +150,7 @@ export function ExchangeRequestCard({ request }: ExchangeRequestCardProps) {
       )}
 
       {!isDemo && (
-      <div className="flex flex-wrap gap-2">
+      <div className="flex flex-wrap gap-2 min-w-0">
         {open && mayAccept && (
           <Button
             size="sm"
