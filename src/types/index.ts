@@ -1,6 +1,9 @@
 import type { Timestamp } from "firebase/firestore";
+import type { PlanId } from "../lib/plans";
 
-export const DEFAULT_TOKEN_BALANCE = 100;
+export type { PlanId };
+
+export const TRIAL_DAYS = 30;
 
 export type SkillCategory =
   | "Design"
@@ -21,7 +24,7 @@ export const SKILL_CATEGORIES: SkillCategory[] = [
   "Other",
 ];
 
-export type TransactionStatus = "pending" | "completed" | "disputed";
+export type SubscriptionStatus = "trial" | "active" | "expired";
 
 export interface ProjectLink {
   title: string;
@@ -34,8 +37,11 @@ export interface User {
   email: string;
   avatar: string;
   bio: string;
-  tokenBalance: number;
   createdAt: Timestamp;
+  subscriptionStatus: SubscriptionStatus;
+  subscriptionPlan?: PlanId;
+  trialEndsAt: Timestamp;
+  subscriptionEndsAt?: Timestamp;
   resumeUrl?: string;
   resumeStoragePath?: string;
   resumeFileName?: string;
@@ -50,27 +56,10 @@ export interface Skill {
   title: string;
   description: string;
   category: SkillCategory;
-  tokenRate: number;
   tags: string[];
   projectLinks: ProjectLink[];
-  acceptsTokens: boolean;
-  acceptsBarter: boolean;
   createdAt: Timestamp;
 }
-
-export interface Transaction {
-  id: string;
-  senderId: string;
-  senderName: string;
-  receiverId: string;
-  receiverName: string;
-  tokens: number;
-  description: string;
-  status: TransactionStatus;
-  createdAt: Timestamp;
-}
-
-export type ExchangeMode = "token" | "barter";
 
 export type ExchangeStatus =
   | "pending"
@@ -79,8 +68,6 @@ export type ExchangeStatus =
   | "completed"
   | "rejected"
   | "cancelled";
-
-export type EscrowStatus = "none" | "held" | "released" | "refunded";
 
 export interface BarterOffer {
   skillId?: string;
@@ -92,7 +79,6 @@ export interface ExchangeOffer {
   fromUserId: string;
   fromUserName: string;
   scopeDescription: string;
-  proposedTokens?: number;
   barterOffer?: BarterOffer;
   createdAt: Timestamp;
 }
@@ -101,19 +87,14 @@ export interface ExchangeRequest {
   id: string;
   skillId: string;
   skillTitle: string;
-  listedTokenRate: number;
-  mode: ExchangeMode;
   requesterId: string;
   requesterName: string;
   providerId: string;
   providerName: string;
   status: ExchangeStatus;
   scopeDescription: string;
-  proposedTokens?: number;
   barterOffer?: BarterOffer;
-  agreedTokens?: number;
   offers: ExchangeOffer[];
-  escrowStatus: EscrowStatus;
   requesterMarkedComplete: boolean;
   providerMarkedComplete: boolean;
   createdAt: Timestamp;
@@ -125,46 +106,115 @@ export type CreateSkillInput = Omit<
   "id" | "userId" | "userName" | "userAvatar" | "createdAt"
 >;
 
-export type CreateTransactionInput = Omit<
-  Transaction,
-  "id" | "status" | "createdAt"
->;
-
 export interface CreateExchangeRequestInput {
   skillId: string;
   skillTitle: string;
-  listedTokenRate: number;
-  mode: ExchangeMode;
   providerId: string;
   providerName: string;
   scopeDescription: string;
-  proposedTokens?: number;
-  barterOffer?: BarterOffer;
+  barterOffer: BarterOffer;
 }
 
 export interface CounterOfferInput {
   scopeDescription: string;
-  proposedTokens?: number;
-  barterOffer?: BarterOffer;
+  barterOffer: BarterOffer;
 }
 
 export interface SkillFilters {
   search?: string;
   category?: SkillCategory | "All";
-  minTokens?: number;
-  maxTokens?: number;
 }
 
 export function normalizeSkill(skill: Skill): Skill {
   return {
     ...skill,
     projectLinks: skill.projectLinks ?? [],
-    acceptsTokens: skill.acceptsTokens ?? true,
-    acceptsBarter: skill.acceptsBarter ?? true,
   };
 }
 
-export function skillAcceptsMode(skill: Skill, mode: ExchangeMode): boolean {
-  const s = normalizeSkill(skill);
-  return mode === "token" ? s.acceptsTokens : s.acceptsBarter;
+export type ComplaintStatus = "pending" | "resolved";
+
+export type ComplaintCategory =
+  | "exchange"
+  | "member"
+  | "billing"
+  | "technical"
+  | "other";
+
+export const COMPLAINT_CATEGORIES: { id: ComplaintCategory; label: string }[] = [
+  { id: "exchange", label: "Exchange / barter issue" },
+  { id: "member", label: "Member behavior" },
+  { id: "billing", label: "Subscription / billing" },
+  { id: "technical", label: "Technical problem" },
+  { id: "other", label: "Something else" },
+];
+
+export interface Complaint {
+  id: string;
+  userId: string;
+  ticketId: string;
+  category: ComplaintCategory;
+  subject: string;
+  description: string;
+  relatedTo?: string;
+  email: string;
+  status: ComplaintStatus;
+  createdAt: Timestamp;
+  resolvedAt?: Timestamp;
+}
+
+export interface CreateComplaintInput {
+  category: ComplaintCategory;
+  subject: string;
+  description: string;
+  relatedTo?: string;
+  email: string;
+}
+
+export type ConversationStatus = "active" | "locked";
+
+export interface Conversation {
+  id: string;
+  exchangeRequestId: string;
+  requesterId: string;
+  requesterName: string;
+  providerId: string;
+  providerName: string;
+  skillTitle: string;
+  exchangeStatus: ExchangeStatus;
+  locked: boolean;
+  requesterMarkedComplete: boolean;
+  providerMarkedComplete: boolean;
+  requesterUnread: number;
+  providerUnread: number;
+  lastMessageText: string;
+  lastMessageAt: Timestamp;
+  createdAt: Timestamp;
+  updatedAt: Timestamp;
+}
+
+export interface ChatMessage {
+  id: string;
+  senderId: string;
+  senderName: string;
+  text: string;
+  system?: boolean;
+  createdAt: Timestamp;
+}
+
+export type NotificationType =
+  | "new_request"
+  | "new_message"
+  | "request_accepted"
+  | "barter_complete";
+
+export interface AppNotification {
+  id: string;
+  userId: string;
+  type: NotificationType;
+  title: string;
+  body: string;
+  exchangeRequestId: string;
+  read: boolean;
+  createdAt: Timestamp;
 }

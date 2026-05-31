@@ -10,29 +10,31 @@ import {
 import { doc, getDoc, serverTimestamp, setDoc } from "firebase/firestore";
 import { useCallback, useEffect } from "react";
 import { auth, db } from "../lib/firebase";
+import { normalizeUser, trialEndsAtFromSignup } from "../lib/subscription";
 import { getInitials } from "../lib/utils";
 import { useAuthStore } from "../store/authStore";
-import { DEFAULT_TOKEN_BALANCE, type User } from "../types";
+import type { User } from "../types";
 
 const googleProvider = new GoogleAuthProvider();
 
 async function fetchUserDoc(uid: string): Promise<User | null> {
   const snap = await getDoc(doc(db, "users", uid));
   if (!snap.exists()) return null;
-  return snap.data() as User;
+  return normalizeUser({ uid, ...snap.data() });
 }
 
 async function createUserDoc(
   firebaseUser: FirebaseUser,
   name: string,
 ): Promise<User> {
-  const userData: Omit<User, "createdAt"> & { createdAt: ReturnType<typeof serverTimestamp> } = {
+  const userData = {
     uid: firebaseUser.uid,
     name,
     email: firebaseUser.email ?? "",
     avatar: getInitials(name),
     bio: "",
-    tokenBalance: DEFAULT_TOKEN_BALANCE,
+    subscriptionStatus: "trial" as const,
+    trialEndsAt: trialEndsAtFromSignup(),
     createdAt: serverTimestamp(),
   };
 
@@ -67,7 +69,7 @@ export function useAuthInit() {
 }
 
 export function useAuth() {
-  const { user, loading, setUser, setTokenBalance } = useAuthStore();
+  const { user, loading, setUser } = useAuthStore();
 
   const login = useCallback(async (email: string, password: string) => {
     const cred = await signInWithEmailAndPassword(auth, email, password);
@@ -121,6 +123,5 @@ export function useAuth() {
     loginWithGoogle,
     logout,
     refreshUser,
-    setTokenBalance,
   };
 }

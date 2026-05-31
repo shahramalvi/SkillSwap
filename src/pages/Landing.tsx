@@ -1,21 +1,21 @@
 import { motion } from "framer-motion";
-import { ArrowRight, Coins, Users, Zap, Star, Shield } from "lucide-react";
+import { ArrowRight, Handshake, Users, Zap, Star, Shield, Sparkles } from "lucide-react";
 import { Link } from "react-router-dom";
 import { Container } from "../components/layout/Container";
 import { PageWrapper } from "../components/layout/PageWrapper";
 import { Logo } from "../components/ui/Logo";
-import { SKILL_CATEGORIES } from "../types";
+import { SKILL_CATEGORIES, TRIAL_DAYS } from "../types";
 
 const steps = [
-  { num: "01", icon: Zap,    title: "Post your skill",    desc: "List what you offer and set your token rate. Takes 2 minutes." },
-  { num: "02", icon: Users,  title: "Find someone",       desc: "Browse Karachi's community for the perfect match." },
-  { num: "03", icon: Coins,  title: "Exchange tokens",    desc: "Pay with tokens, earn tokens. No cash changes hands." },
+  { num: "01", icon: Zap, title: "Post your skill", desc: "List what you offer. Takes 2 minutes — resume optional." },
+  { num: "02", icon: Users, title: "Find someone", desc: "Browse jobs and discover the perfect barter match in Karachi." },
+  { num: "03", icon: Handshake, title: "Trade skills", desc: "Propose a barter, negotiate scope, and complete the exchange." },
 ];
 
 const features = [
-  { icon: Shield, label: "Secure transfers",   desc: "Atomic token swaps — transactions are always safe." },
-  { icon: Zap,    label: "Real-time updates",  desc: "Live balance and transaction feed, always up to date." },
-  { icon: Star,   label: "Build reputation",   desc: "Complete trades, grow your profile, earn trust." },
+  { icon: Shield, label: "Barter-only economy", desc: "No tokens or cash — trade skills directly with other members." },
+  { icon: Sparkles, label: `${TRIAL_DAYS}-day free trial`, desc: "Try the full app free, then subscribe to keep bartering." },
+  { icon: Star, label: "Build reputation", desc: "Complete trades, grow your profile, earn trust." },
 ];
 
 const marqueeItems = [...SKILL_CATEGORIES, ...SKILL_CATEGORIES, ...SKILL_CATEGORIES];
@@ -23,10 +23,7 @@ const marqueeItems = [...SKILL_CATEGORIES, ...SKILL_CATEGORIES, ...SKILL_CATEGOR
 export function Landing() {
   return (
     <PageWrapper className="bg-canvas">
-
-      {/* ── Hero ── */}
       <section className="relative min-h-screen flex flex-col bg-hero-gradient overflow-hidden dot-pattern">
-        {/* Floating orbs */}
         <div className="absolute top-32 left-[10%] w-64 h-64 rounded-full bg-teal/20 blur-3xl pointer-events-none animate-pulse-slow" />
         <div className="absolute bottom-20 right-[8%] w-80 h-80 rounded-full bg-purple/15 blur-3xl pointer-events-none animate-pulse-slow" style={{ animationDelay: "1.5s" }} />
 
@@ -52,20 +49,18 @@ export function Landing() {
               className="inline-flex items-center gap-2 glass text-on-hero-muted text-xs font-semibold px-4 py-2 rounded-full mb-6"
             >
               <span className="w-1.5 h-1.5 rounded-full bg-teal inline-block animate-pulse" />
-              Karachi&apos;s skill economy — now live
+              Karachi&apos;s skill barter network — now live
             </motion.div>
 
-            <h1 className="text-5xl sm:text-6xl md:text-7xl font-extrabold text-on-hero leading-[1.05] tracking-tight">
+            <h1 className="text-4xl sm:text-5xl md:text-6xl lg:text-7xl font-extrabold text-on-hero leading-[1.05] tracking-tight">
               Trade skills.{" "}
-              <span className="relative inline-block">
-                <span className="text-teal">Earn tokens.</span>
-              </span>
+              <span className="text-teal">Skip the cash.</span>
               <br />
               <span className="text-on-hero-muted">Build together.</span>
             </h1>
 
             <p className="mt-6 text-teal/80 max-w-xl mx-auto text-lg leading-relaxed">
-              Swap your expertise for tokens. Spend tokens to get help. A real circular economy — just for Karachi.
+              Swap your expertise for someone else&apos;s. A barter-only circular economy — just for Karachi.
             </p>
 
             <div className="flex flex-col sm:flex-row gap-4 justify-center mt-10">
@@ -75,7 +70,7 @@ export function Landing() {
                   type="button"
                   className="flex items-center gap-2 justify-center bg-white text-navy font-bold px-8 py-4 rounded-2xl text-base shadow-none hover:bg-teal-light transition-colors"
                 >
-                  Start bartering <ArrowRight size={20} />
+                  Start free trial <ArrowRight size={20} />
                 </motion.button>
               </Link>
               <a href="#how-it-works">
@@ -89,18 +84,16 @@ export function Landing() {
               </a>
             </div>
 
-            {/* Social proof row */}
             <motion.div className="mt-12 flex flex-wrap items-center justify-center gap-6 text-on-hero-muted text-sm">
-              <span className="flex items-center gap-1.5"><Coins size={15} className="text-gold" /> 100 tokens on signup</span>
+              <span className="flex items-center gap-1.5"><Sparkles size={15} className="text-gold" /> {TRIAL_DAYS}-day free trial</span>
               <span className="w-px h-4 bg-teal/30" />
-              <span className="flex items-center gap-1.5"><Shield size={15} className="text-teal" /> Secure token transfers</span>
+              <span className="flex items-center gap-1.5"><Handshake size={15} className="text-teal" /> Barter-only exchanges</span>
               <span className="w-px h-4 bg-teal/30" />
               <span className="flex items-center gap-1.5"><Users size={15} className="text-purple" /> Karachi community</span>
             </motion.div>
           </motion.div>
         </div>
 
-        {/* Marquee */}
         <div className="overflow-hidden border-y border-teal/20 py-4 bg-navy/30 backdrop-blur-sm relative z-10">
           <div className="flex animate-marquee whitespace-nowrap">
             {marqueeItems.map((cat, i) => (
@@ -112,7 +105,6 @@ export function Landing() {
         </div>
       </section>
 
-      {/* ── How it works ── */}
       <section id="how-it-works" className="py-24">
         <Container>
         <motion.div
@@ -150,7 +142,6 @@ export function Landing() {
         </Container>
       </section>
 
-      {/* ── Features ── */}
       <section className="py-16 bg-navy-gradient">
         <Container className="relative z-10">
           <div className="grid md:grid-cols-3 gap-8">
@@ -174,7 +165,6 @@ export function Landing() {
         </Container>
       </section>
 
-      {/* ── CTA ── */}
       <section className="py-24">
         <Container size="narrow" className="text-center">
         <motion.div
@@ -183,7 +173,7 @@ export function Landing() {
           viewport={{ once: true }}
         >
           <h2 className="text-4xl font-extrabold text-navy mb-4">Ready to trade skills?</h2>
-          <p className="text-muted mb-10">Join Karachi&apos;s growing skill exchange community. Free to join. 100 tokens on signup.</p>
+          <p className="text-muted mb-10">Join Karachi&apos;s growing barter community. {TRIAL_DAYS} days free, then subscribe to continue.</p>
           <Link to="/register">
             <motion.button
               whileHover={{ scale: 1.04 }} whileTap={{ scale: 0.97 }}
@@ -197,7 +187,6 @@ export function Landing() {
         </Container>
       </section>
 
-      {/* ── Footer ── */}
       <footer className="border-t border-border py-10 text-center bg-white">
         <Container>
         <Logo variant="dark" className="h-10 mx-auto mb-3" />

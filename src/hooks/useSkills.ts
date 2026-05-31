@@ -13,6 +13,7 @@ import {
 } from "firebase/firestore";
 import { useCallback } from "react";
 import { db } from "../lib/firebase";
+import { stripUndefined } from "../lib/firestoreUtils";
 import { useAuthStore } from "../store/authStore";
 import type { CreateSkillInput, Skill, SkillCategory, SkillFilters } from "../types";
 
@@ -26,14 +27,6 @@ function applyClientFilters(skills: Skill[], filters?: SkillFilters): Skill[] {
 
   if (filters?.category && filters.category !== "All") {
     result = result.filter((s) => s.category === filters.category);
-  }
-
-  if (filters?.minTokens !== undefined) {
-    result = result.filter((s) => s.tokenRate >= filters.minTokens!);
-  }
-
-  if (filters?.maxTokens !== undefined) {
-    result = result.filter((s) => s.tokenRate <= filters.maxTokens!);
   }
 
   return result;
@@ -52,17 +45,25 @@ export function useSkills() {
           where("category", "==", filters.category as SkillCategory),
           ...constraints,
         );
-        return onSnapshot(q, (snap) => {
-          const skills = snap.docs.map((d) => ({ id: d.id, ...d.data() }) as Skill);
-          callback(applyClientFilters(skills, filters));
-        });
+        return onSnapshot(
+          q,
+          (snap) => {
+            const skills = snap.docs.map((d) => ({ id: d.id, ...d.data() }) as Skill);
+            callback(applyClientFilters(skills, filters));
+          },
+          () => callback([]),
+        );
       }
 
       const q = query(collection(db, "skills"), ...constraints);
-      return onSnapshot(q, (snap) => {
-        const skills = snap.docs.map((d) => ({ id: d.id, ...d.data() }) as Skill);
-        callback(applyClientFilters(skills, filters));
-      });
+      return onSnapshot(
+        q,
+        (snap) => {
+          const skills = snap.docs.map((d) => ({ id: d.id, ...d.data() }) as Skill);
+          callback(applyClientFilters(skills, filters));
+        },
+        () => callback([]),
+      );
     },
     [],
   );
@@ -80,9 +81,13 @@ export function useSkills() {
         where("userId", "==", userId),
         orderBy("createdAt", "desc"),
       );
-      return onSnapshot(q, (snap) => {
-        callback(snap.docs.map((d) => ({ id: d.id, ...d.data() }) as Skill));
-      });
+      return onSnapshot(
+        q,
+        (snap) => {
+          callback(snap.docs.map((d) => ({ id: d.id, ...d.data() }) as Skill));
+        },
+        () => callback([]),
+      );
     },
     [],
   );
@@ -105,7 +110,7 @@ export function useSkills() {
   );
 
   const updateSkill = useCallback(async (id: string, data: Partial<CreateSkillInput>) => {
-    await updateDoc(doc(db, "skills", id), data);
+    await updateDoc(doc(db, "skills", id), stripUndefined(data as Record<string, unknown>));
   }, []);
 
   const deleteSkill = useCallback(async (id: string) => {

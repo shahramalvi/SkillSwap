@@ -4,7 +4,8 @@ import { cn } from "../../lib/utils";
 const FALLBACK: Record<string, string> = {
   "/login": "/",
   "/register": "/",
-  "/search": "/dashboard",
+  "/jobs": "/dashboard",
+  "/plan": "/dashboard",
   "/requests": "/dashboard",
   "/post-skill": "/dashboard",
   "/profile/me": "/dashboard",
@@ -12,7 +13,7 @@ const FALLBACK: Record<string, string> = {
 
 function defaultBackTarget(pathname: string): string {
   if (pathname.startsWith("/profile/") && pathname !== "/profile/me") {
-    return "/search";
+    return "/jobs";
   }
   return FALLBACK[pathname] ?? "/dashboard";
 }

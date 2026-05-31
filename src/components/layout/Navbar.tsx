@@ -1,13 +1,14 @@
 import { motion } from "framer-motion";
-import { Inbox, LayoutDashboard, Search, PlusCircle, LogOut } from "lucide-react";
+import { Briefcase, Crown, FileText, Inbox, LayoutDashboard, PlusCircle, LogOut } from "lucide-react";
 import { Link, useLocation, useNavigate } from "react-router-dom";
 import { useAuth } from "../../hooks/useAuth";
-import { TokenBadge } from "../features/TokenBadge";
+import { useSubscription } from "../../hooks/useSubscription";
 import { Avatar } from "../ui/Avatar";
 import { Logo } from "../ui/Logo";
 
 export function Navbar() {
   const { user, logout } = useAuth();
+  const { info } = useSubscription();
   const navigate = useNavigate();
   const location = useLocation();
 
@@ -18,8 +19,9 @@ export function Navbar() {
 
   const navLinks = [
     { to: "/dashboard", label: "Dashboard", icon: LayoutDashboard },
+    { to: "/jobs", label: "Jobs", icon: Briefcase },
+    { to: "/proposals", label: "Proposals", icon: FileText },
     { to: "/requests", label: "Requests", icon: Inbox },
-    { to: "/search", label: "Search", icon: Search },
     { to: "/post-skill", label: "Post skill", icon: PlusCircle },
   ];
 
@@ -54,10 +56,13 @@ export function Navbar() {
               );
             })}
 
-            <TokenBadge
-              balance={user.tokenBalance}
-              className="ml-2 hidden sm:inline-flex px-3 py-2 rounded-xl text-sm font-medium text-muted bg-transparent border-0 hover:bg-teal-light hover:text-teal"
-            />
+            <Link
+              to="/plan"
+              className="ml-2 hidden sm:inline-flex items-center gap-1.5 px-3 py-2 rounded-xl text-sm font-medium text-muted bg-gold-light/50 hover:bg-gold-light hover:text-navy transition-all"
+            >
+              <Crown size={14} className="text-gold" />
+              {info?.status === "active" ? "Pro" : info?.daysRemaining != null ? `${info.daysRemaining}d left` : "Plan"}
+            </Link>
 
             <Link to="/profile/me" className="ml-1">
               <Avatar initials={user.avatar} size="sm" ring />

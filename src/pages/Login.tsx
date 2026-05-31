@@ -3,7 +3,7 @@ import { motion } from "framer-motion";
 import { useState } from "react";
 import { useForm } from "react-hook-form";
 import toast from "react-hot-toast";
-import { Link, useNavigate } from "react-router-dom";
+import { Link, useLocation, useNavigate } from "react-router-dom";
 import { z } from "zod";
 import { PageWrapper } from "../components/layout/PageWrapper";
 import { Logo } from "../components/ui/Logo";
@@ -21,6 +21,9 @@ type FormData = z.infer<typeof schema>;
 export function Login() {
   const { login, loginWithGoogle } = useAuth();
   const navigate = useNavigate();
+  const location = useLocation();
+  const redirectTo =
+    (location.state as { from?: string } | null)?.from ?? "/dashboard";
   const [loading, setLoading] = useState(false);
 
   const { register, handleSubmit, formState: { errors } } = useForm<FormData>({ resolver: zodResolver(schema) });
@@ -30,7 +33,7 @@ export function Login() {
     try {
       await login(data.email, data.password);
       toast.success("Welcome back!");
-      navigate("/dashboard");
+      navigate(redirectTo);
     } catch (err) {
       toast.error(getAuthErrorMessage(err), { duration: 6000 });
     } finally { setLoading(false); }
@@ -41,7 +44,7 @@ export function Login() {
     try {
       await loginWithGoogle();
       toast.success("Welcome!");
-      navigate("/dashboard");
+      navigate(redirectTo);
     } catch (err) {
       toast.error(getAuthErrorMessage(err), { duration: 6000 });
     } finally { setLoading(false); }
@@ -58,7 +61,7 @@ export function Login() {
             Welcome<br /><span className="text-teal">back</span>
           </h1>
           <p className="text-on-hero-muted text-base leading-relaxed max-w-sm">
-            Sign in to manage your skills, check your token balance, and connect with Karachi's community.
+            Sign in to manage your skills, barter with the community, and track your proposals.
           </p>
         </div>
       </div>

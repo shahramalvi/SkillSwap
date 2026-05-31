@@ -1,5 +1,5 @@
 import { motion } from "framer-motion";
-import { Coins, Handshake, Link2, Tag } from "lucide-react";
+import { Handshake, Link2, Tag } from "lucide-react";
 import type { Skill } from "../../types";
 import { normalizeSkill } from "../../types";
 import { Badge } from "../ui/Badge";
@@ -28,67 +28,55 @@ export function SkillCard({ skill, onRequest, showRequest }: SkillCardProps) {
   return (
     <motion.div
       transition={{ duration: 0.2 }}
-      className="bg-white border border-border rounded-2xl p-5 shadow-card relative group cursor-default h-full hover:border-teal/40 hover:shadow-soft transition-[border-color,box-shadow]"
+      className="bg-white border border-white rounded-3xl p-5 shadow-card relative group cursor-default h-full w-full min-w-0 overflow-hidden flex flex-col hover:border-teal/30 transition-[border-color,box-shadow]"
     >
-      <div className="flex items-start justify-between mb-3">
+      <div className="flex flex-wrap items-start gap-2 mb-3">
         <Badge variant={color}>{s.category}</Badge>
-        <span className="font-extrabold text-teal flex items-center gap-1 text-sm bg-teal/10 px-2.5 py-1 rounded-full">
-          <Coins size={13} />
-          {s.tokenRate}
+        <span className="text-[10px] font-bold uppercase tracking-wide bg-teal/10 text-teal-dark px-2 py-0.5 rounded-full inline-flex items-center gap-0.5 shrink-0">
+          <Handshake size={10} /> Barter
         </span>
       </div>
 
-      <h3 className="font-bold text-lg text-navy mb-1 leading-snug">{s.title}</h3>
-      <p className="text-sm text-muted mb-3 line-clamp-2 leading-relaxed">{s.description}</p>
-
-      <div className="flex flex-wrap gap-1.5 mb-3">
-        {s.acceptsTokens && (
-          <span className="text-[10px] font-bold uppercase tracking-wide bg-navy/10 text-navy px-2 py-0.5 rounded-full inline-flex items-center gap-0.5">
-            <Coins size={10} /> Tokens
-          </span>
-        )}
-        {s.acceptsBarter && (
-          <span className="text-[10px] font-bold uppercase tracking-wide bg-teal/10 text-teal-dark px-2 py-0.5 rounded-full inline-flex items-center gap-0.5">
-            <Handshake size={10} /> Barter
-          </span>
-        )}
-      </div>
+      <h3 className="font-bold text-lg text-navy mb-1 leading-snug break-words line-clamp-2">
+        {s.title}
+      </h3>
+      <p className="text-sm text-muted mb-3 line-clamp-2 leading-relaxed break-words">{s.description}</p>
 
       {s.projectLinks.length > 0 && (
-        <div className="flex flex-wrap gap-2 mb-3">
+        <div className="flex flex-col gap-1.5 mb-3 min-w-0">
           {s.projectLinks.slice(0, 2).map((link) => (
             <a
               key={link.url}
               href={link.url}
               target="_blank"
               rel="noreferrer"
-              className="text-xs text-teal hover:underline inline-flex items-center gap-1"
+              className="text-xs text-teal hover:underline inline-flex items-center gap-1 min-w-0 max-w-full"
               onClick={(e) => e.stopPropagation()}
             >
-              <Link2 size={10} />
-              {link.title}
+              <Link2 size={10} className="shrink-0" />
+              <span className="truncate">{link.title}</span>
             </a>
           ))}
         </div>
       )}
 
       {s.tags.length > 0 && (
-        <div className="flex flex-wrap gap-1.5 mb-4">
+        <div className="flex flex-wrap gap-1.5 mb-4 min-w-0">
           {s.tags.slice(0, 4).map((tag) => (
             <span
               key={tag}
-              className="inline-flex items-center gap-1 text-xs text-muted bg-slate-100 rounded-full px-2 py-0.5"
+              className="inline-flex items-center gap-1 text-xs text-muted bg-slate-100 rounded-full px-2 py-0.5 max-w-full min-w-0"
             >
-              <Tag size={10} />
-              {tag}
+              <Tag size={10} className="shrink-0" />
+              <span className="truncate">{tag}</span>
             </span>
           ))}
         </div>
       )}
 
       {showRequest && onRequest && (
-        <Button variant="secondary" fullWidth size="sm" onClick={onRequest}>
-          Request service
+        <Button variant="secondary" fullWidth size="sm" onClick={onRequest} className="mt-auto shrink-0">
+          Propose barter
         </Button>
       )}
     </motion.div>

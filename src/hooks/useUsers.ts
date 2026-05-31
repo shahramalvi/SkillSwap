@@ -10,6 +10,7 @@ import {
 } from "firebase/firestore";
 import { useCallback } from "react";
 import { db } from "../lib/firebase";
+import { normalizeUser } from "../lib/subscription";
 import { getInitials } from "../lib/utils";
 import { useAuthStore } from "../store/authStore";
 import type { User } from "../types";
@@ -21,7 +22,7 @@ export function useUsers() {
   const fetchUser = useCallback(async (uid: string): Promise<User | null> => {
     const snap = await getDoc(doc(db, "users", uid));
     if (!snap.exists()) return null;
-    return snap.data() as User;
+    return normalizeUser({ uid, ...snap.data() });
   }, []);
 
   const searchUsers = useCallback(async (searchQuery: string): Promise<User[]> => {
@@ -35,7 +36,7 @@ export function useUsers() {
     );
 
     const snap = await getDocs(q);
-    return snap.docs.map((d) => d.data() as User);
+    return snap.docs.map((d) => normalizeUser({ uid: d.id, ...d.data() }));
   }, []);
 
   const updateUser = useCallback(

@@ -1,5 +1,3 @@
-import type { Transaction } from "../types";
-
 export function cn(...classes: (string | false | null | undefined)[]): string {
   return classes.filter(Boolean).join(" ");
 }
@@ -32,41 +30,4 @@ export function formatRelativeTime(date: Date): string {
   const days = Math.floor(hours / 24);
   if (days < 7) return `${days}d ago`;
   return formatDate(date);
-}
-
-export interface DebtEntry {
-  userId: string;
-  userName: string;
-  userAvatar: string;
-  netTokens: number;
-}
-
-export function groupTransactionsByUser(
-  transactions: Transaction[],
-  currentUserId: string,
-): DebtEntry[] {
-  const map = new Map<string, DebtEntry>();
-
-  for (const tx of transactions) {
-    if (tx.status !== "pending") continue;
-
-    const isSender = tx.senderId === currentUserId;
-    const otherId = isSender ? tx.receiverId : tx.senderId;
-    const otherName = isSender ? tx.receiverName : tx.senderName;
-    const delta = isSender ? -tx.tokens : tx.tokens;
-
-    const existing = map.get(otherId);
-    if (existing) {
-      existing.netTokens += delta;
-    } else {
-      map.set(otherId, {
-        userId: otherId,
-        userName: otherName,
-        userAvatar: getInitials(otherName),
-        netTokens: delta,
-      });
-    }
-  }
-
-  return Array.from(map.values()).filter((e) => e.netTokens !== 0);
 }

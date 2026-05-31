@@ -26,7 +26,7 @@ export function PageWrapper({ children, className, showBack = true, backTo }: Pa
       className={cn("relative", className)}
     >
       {displayBack && (
-        <div className="fixed top-[4.5rem] right-4 sm:right-5 lg:right-6 z-30">
+        <div className="fixed top-6 right-6 sm:right-8 z-30 ml-[72px]">
           <BackButton to={backTo} />
         </div>
       )}

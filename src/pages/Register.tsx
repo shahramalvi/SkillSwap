@@ -1,6 +1,6 @@
 import { zodResolver } from "@hookform/resolvers/zod";
 import { motion } from "framer-motion";
-import { Coins } from "lucide-react";
+import { Sparkles } from "lucide-react";
 import { useState } from "react";
 import { useForm } from "react-hook-form";
 import toast from "react-hot-toast";
@@ -12,6 +12,7 @@ import { Button } from "../components/ui/Button";
 import { Input } from "../components/ui/Input";
 import { useAuth } from "../hooks/useAuth";
 import { getAuthErrorMessage } from "../lib/authErrors";
+import { TRIAL_DAYS } from "../types";
 
 const schema = z.object({
   name: z.string().min(2, "Name must be at least 2 characters"),
@@ -35,7 +36,7 @@ export function Register() {
     setLoading(true);
     try {
       await registerUser(data.name, data.email, data.password);
-      toast.success("Welcome! 100 tokens added to your wallet 🎉");
+      toast.success(`Welcome! Your ${TRIAL_DAYS}-day free trial starts now`);
       navigate("/dashboard");
     } catch (err) {
       toast.error(getAuthErrorMessage(err), { duration: 6000 });
@@ -62,18 +63,18 @@ export function Register() {
         <div className="relative z-10">
           <Logo variant="light" className="h-16 mb-10" />
           <h1 className="text-5xl font-extrabold text-on-hero leading-tight mb-4">
-            Start with<br /><span className="text-gold">100 tokens</span>
+            Start with<br /><span className="text-gold">{TRIAL_DAYS} days free</span>
           </h1>
           <p className="text-on-hero-muted text-base leading-relaxed max-w-sm mb-8">
-            Join Karachi's peer-to-peer skill exchange. Trade expertise, not cash.
+            Join Karachi's peer-to-peer skill barter network. Trade expertise, not cash.
           </p>
           <div className="flex items-center gap-3 glass rounded-2xl px-5 py-4 w-fit">
             <div className="w-10 h-10 rounded-xl bg-gold/20 flex items-center justify-center">
-              <Coins size={20} className="text-gold" />
+              <Sparkles size={20} className="text-gold" />
             </div>
             <div>
-              <p className="text-on-hero font-bold text-sm">Free signup bonus</p>
-              <p className="text-on-hero-muted text-xs">100 tokens instantly on registration</p>
+              <p className="text-on-hero font-bold text-sm">Free trial included</p>
+              <p className="text-on-hero-muted text-xs">{TRIAL_DAYS} days of full access on signup</p>
             </div>
           </div>
         </div>
