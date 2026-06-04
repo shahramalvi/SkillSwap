@@ -1,7 +1,8 @@
-import { Edit2, FileText, Inbox, Pencil, Plus, Trash2 } from "lucide-react";
+import { Edit2, FileText, Inbox, Pencil, Plus } from "lucide-react";
 import { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
 import toast from "react-hot-toast";
+import { DeleteSkillButton } from "../components/features/DeleteSkillButton";
 import { DemoDataBanner } from "../components/features/DemoDataBanner";
 import { SkillCard } from "../components/features/SkillCard";
 import {
@@ -15,17 +16,14 @@ import { Avatar } from "../components/ui/Avatar";
 import { Button } from "../components/ui/Button";
 import { Skeleton } from "../components/ui/Skeleton";
 import { useUserSkillsData } from "../hooks/useBrowseSkillsData";
-import { useSkills } from "../hooks/useSkills";
 import { useSubscription } from "../hooks/useSubscription";
 import { useUsers } from "../hooks/useUsers";
-import { isDemoSkill } from "../lib/dashboardDemoData";
 import { useAuthStore } from "../store/authStore";
 
 export function MyProfile() {
   const user = useAuthStore((s) => s.user);
   const { info } = useSubscription();
   const { updateUser } = useUsers();
-  const { deleteSkill } = useSkills();
   const { displaySkills: skills, loading, isDemo } = useUserSkillsData(user?.uid);
   const [editing, setEditing] = useState(false);
   const [name, setName] = useState("");
@@ -50,16 +48,6 @@ export function MyProfile() {
       toast.error("Failed to update profile");
     } finally {
       setSaving(false);
-    }
-  };
-
-  const handleDeleteSkill = async (id: string) => {
-    if (isDemoSkill(id)) return;
-    try {
-      await deleteSkill(id);
-      toast.success("Skill deleted");
-    } catch {
-      toast.error("Failed to delete skill");
     }
   };
 
@@ -202,17 +190,12 @@ export function MyProfile() {
                 {skills.map((skill) => (
                   <div key={skill.id} className="min-w-0 flex flex-col">
                     <SkillCard skill={skill} />
-                    {!isDemoSkill(skill.id) && (
-                      <Button
-                        variant="danger"
-                        size="sm"
-                        fullWidth
-                        className="mt-2"
-                        onClick={() => handleDeleteSkill(skill.id)}
-                      >
-                        <Trash2 size={13} className="mr-1 inline" /> Delete
-                      </Button>
-                    )}
+                    <DeleteSkillButton
+                      skillId={skill.id}
+                      skillTitle={skill.title}
+                      fullWidth
+                      className="mt-2"
+                    />
                   </div>
                 ))}
               </div>

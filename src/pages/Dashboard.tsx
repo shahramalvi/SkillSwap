@@ -276,7 +276,7 @@ export function Dashboard() {
             ))}
           </div>
         ) : (
-          <div className="grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-4 gap-4">
+          <div className="grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-4 gap-4 min-w-0 max-w-full">
             <MetricCard
               label="Active barters"
               value={metrics.active}
@@ -305,7 +305,7 @@ export function Dashboard() {
               initial={{ opacity: 0, y: 16 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ delay: 0.15 }}
-              className="bg-white rounded-3xl border border-white shadow-card p-5 flex items-center justify-between min-h-[140px]"
+              className="bg-white rounded-3xl border border-white shadow-card p-5 flex items-center justify-between min-h-[140px] min-w-0 overflow-hidden"
             >
               <div>
                 <p className="text-xs font-medium text-muted">Success rate</p>
@@ -333,8 +333,8 @@ export function Dashboard() {
           useDemoCharts={isDemo}
         />
 
-        <div className="grid lg:grid-cols-3 gap-4 sm:gap-5 min-w-0">
-          <div className="lg:col-span-2">
+        <div className="grid lg:grid-cols-3 gap-4 sm:gap-5 min-w-0 max-w-full">
+          <div className="lg:col-span-2 min-w-0 max-w-full overflow-visible">
             <UpcomingRequestsRow requests={displayRequests} userId={user.uid} />
           </div>
 

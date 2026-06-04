@@ -7,6 +7,7 @@ import { AppAsidePanel, AppPage, AppPageSplit, AppPanel } from "../components/la
 import { Skeleton } from "../components/ui/Skeleton";
 import { useBrowseSkillsData } from "../hooks/useBrowseSkillsData";
 import { cn } from "../lib/utils";
+import { useAuthStore } from "../store/authStore";
 import { SKILL_CATEGORIES, type SkillCategory } from "../types";
 
 const categories: (SkillCategory | "All")[] = ["All", ...SKILL_CATEGORIES];
@@ -23,6 +24,7 @@ const CATEGORY_BG: Record<string, string> = {
 };
 
 export function Jobs() {
+  const user = useAuthStore((s) => s.user);
   const [search, setSearch] = useState("");
   const [category, setCategory] = useState<SkillCategory | "All">("All");
 
@@ -124,7 +126,7 @@ export function Jobs() {
               >
                 {displaySkills.map((job) => (
                   <div key={job.id} className="min-w-0">
-                    <JobCard skill={job} />
+                    <JobCard skill={job} isOwner={user?.uid === job.userId} />
                   </div>
                 ))}
               </motion.div>

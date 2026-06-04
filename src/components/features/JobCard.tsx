@@ -1,6 +1,7 @@
 import { motion } from "framer-motion";
 import { ExternalLink, Handshake, Tag } from "lucide-react";
 import { Link } from "react-router-dom";
+import { DeleteSkillButton } from "./DeleteSkillButton";
 import { isDemoSkill } from "../../lib/dashboardDemoData";
 import { formatRelativeTime } from "../../lib/utils";
 import type { Skill } from "../../types";
@@ -20,9 +21,10 @@ const CATEGORY_COLORS: Record<string, "teal" | "navy" | "gold" | "purple" | "ros
 
 interface JobCardProps {
   skill: Skill;
+  isOwner?: boolean;
 }
 
-export function JobCard({ skill }: JobCardProps) {
+export function JobCard({ skill, isOwner = false }: JobCardProps) {
   const s = normalizeSkill(skill);
   const color = CATEGORY_COLORS[s.category] ?? "muted";
   const isDemo = isDemoSkill(s.id);
@@ -81,12 +83,16 @@ export function JobCard({ skill }: JobCardProps) {
             </p>
           </div>
         </Link>
-        <Link
-          to={`/profile/${s.userId}`}
-          className="shrink-0 flex items-center gap-1.5 bg-navy text-on-hero rounded-xl px-3 py-2 text-xs font-semibold hover:bg-navy-light transition-colors"
-        >
-          View <ExternalLink size={12} />
-        </Link>
+        {isOwner ? (
+          <DeleteSkillButton skillId={s.id} skillTitle={s.title} />
+        ) : (
+          <Link
+            to={`/profile/${s.userId}`}
+            className="shrink-0 flex items-center gap-1.5 bg-navy text-on-hero rounded-xl px-3 py-2 text-xs font-semibold hover:bg-navy-light transition-colors"
+          >
+            View <ExternalLink size={12} />
+          </Link>
+        )}
       </div>
     </motion.div>
   );

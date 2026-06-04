@@ -3,6 +3,7 @@ import {
   collection,
   deleteDoc,
   doc,
+  getDoc,
   onSnapshot,
   orderBy,
   query,
@@ -11,6 +12,7 @@ import {
   where,
   type Unsubscribe,
 } from "firebase/firestore";
+import { isDemoSkill } from "../lib/dashboardDemoData";
 import { useCallback } from "react";
 import { db } from "../lib/firebase";
 import { stripUndefined } from "../lib/firestoreUtils";
@@ -113,9 +115,22 @@ export function useSkills() {
     await updateDoc(doc(db, "skills", id), stripUndefined(data as Record<string, unknown>));
   }, []);
 
-  const deleteSkill = useCallback(async (id: string) => {
-    await deleteDoc(doc(db, "skills", id));
-  }, []);
+  const deleteSkill = useCallback(
+    async (id: string) => {
+      if (!currentUser) throw new Error("You must be signed in to delete a skill");
+      if (isDemoSkill(id)) throw new Error("Sample skills cannot be deleted");
+
+      const ref = doc(db, "skills", id);
+      const snap = await getDoc(ref);
+      if (!snap.exists()) throw new Error("Skill not found");
+      if (snap.data().userId !== currentUser.uid) {
+        throw new Error("You can only delete your own skill offers");
+      }
+
+      await deleteDoc(ref);
+    },
+    [currentUser],
+  );
 
   return {
     fetchAllSkills,

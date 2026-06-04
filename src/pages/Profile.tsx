@@ -2,6 +2,7 @@ import { motion } from "framer-motion";
 import { FileText, Handshake, MapPin } from "lucide-react";
 import { useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
+import { DeleteSkillButton } from "../components/features/DeleteSkillButton";
 import { DemoDataBanner } from "../components/features/DemoDataBanner";
 import { RequestServiceModal } from "../components/features/RequestServiceModal";
 import { SkillCard } from "../components/features/SkillCard";
@@ -123,7 +124,14 @@ export function Profile() {
         }
         main={
           <>
-            <AppSectionTitle title="Skills offered" description="Available for barter exchange" />
+            <AppSectionTitle
+              title="Skills offered"
+              description={
+                isOwnProfile
+                  ? "Manage or remove your barter listings"
+                  : "Available for barter exchange"
+              }
+            />
 
             {skills.length === 0 ? (
               <AppPanel className="p-12 text-center text-muted text-sm">
@@ -137,12 +145,20 @@ export function Profile() {
                 className="grid md:grid-cols-2 xl:grid-cols-3 gap-5 items-start"
               >
                 {skills.map((skill) => (
-                  <div key={skill.id} className="min-w-0">
+                  <div key={skill.id} className="min-w-0 flex flex-col">
                     <SkillCard
-                    skill={normalizeSkill(skill)}
-                    showRequest={!isOwnProfile && !isDemoProfile}
-                    onRequest={() => setSelectedSkill(normalizeSkill(skill))}
-                  />
+                      skill={normalizeSkill(skill)}
+                      showRequest={!isOwnProfile && !isDemoProfile}
+                      onRequest={() => setSelectedSkill(normalizeSkill(skill))}
+                    />
+                    {isOwnProfile && (
+                      <DeleteSkillButton
+                        skillId={skill.id}
+                        skillTitle={skill.title}
+                        fullWidth
+                        className="mt-2"
+                      />
+                    )}
                   </div>
                 ))}
               </motion.div>

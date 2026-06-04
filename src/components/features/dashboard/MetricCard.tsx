@@ -51,7 +51,7 @@ export function MetricCard({
       initial={{ opacity: 0, y: 16 }}
       animate={{ opacity: 1, y: 0 }}
       transition={{ delay, duration: 0.35 }}
-      className="bg-white rounded-3xl border border-white shadow-card p-5 flex flex-col gap-3 min-h-[140px]"
+      className="bg-white rounded-3xl border border-white shadow-card p-5 flex flex-col gap-3 min-h-[140px] min-w-0 max-w-full overflow-hidden"
     >
       <div className="flex items-start justify-between gap-2">
         <div>

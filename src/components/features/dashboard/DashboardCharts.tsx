@@ -61,7 +61,7 @@ export function DashboardCharts({ requests, skills, useDemoCharts = false }: Das
 
   return (
     <div className="grid grid-cols-1 md:grid-cols-5 gap-4 sm:gap-5 min-w-0">
-      <div className="md:col-span-3 bg-white rounded-3xl border border-white shadow-card p-4 sm:p-6 min-w-0 overflow-hidden">
+      <div className="md:col-span-3 bg-white rounded-3xl border border-white shadow-card p-4 sm:p-6 min-w-0 max-w-full overflow-hidden">
         <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 mb-2">
           <div>
             <h2 className="text-base font-bold text-navy">Exchange activity</h2>
@@ -105,7 +105,7 @@ export function DashboardCharts({ requests, skills, useDemoCharts = false }: Das
         </div>
       </div>
 
-      <div className="md:col-span-2 bg-white rounded-3xl border border-white shadow-card p-4 sm:p-6 flex flex-col min-w-0">
+      <div className="md:col-span-2 bg-white rounded-3xl border border-white shadow-card p-4 sm:p-6 flex flex-col min-w-0 max-w-full overflow-hidden">
         <h2 className="text-base font-bold text-navy mb-1">{distributionTitle}</h2>
         <p className="text-xs text-muted mb-4">
           Breakdown of your listings & requests
